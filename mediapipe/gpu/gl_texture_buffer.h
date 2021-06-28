@@ -21,7 +21,6 @@
 #include <atomic>
 
 #include "absl/memory/memory.h"
-#include "mediapipe/framework/formats/image_frame.h"
 #include "mediapipe/gpu/gl_base.h"
 #include "mediapipe/gpu/gl_context.h"
 #include "mediapipe/gpu/gpu_buffer_format.h"
@@ -61,11 +60,7 @@ class GlTextureBuffer {
   // provided later via glTexSubImage2D.
   static std::unique_ptr<GlTextureBuffer> Create(int width, int height,
                                                  GpuBufferFormat format,
-                                                 const void* data = nullptr,
-                                                 int alignment = 4);
-
-  // Create a texture with a copy of the data in image_frame.
-  static std::unique_ptr<GlTextureBuffer> Create(const ImageFrame& image_frame);
+                                                 const void* data = nullptr);
 
   // Wraps an existing texture, but does not take ownership of it.
   // deletion_callback is invoked when the GlTextureBuffer is released, so
@@ -132,7 +127,7 @@ class GlTextureBuffer {
   // If data is provided, it is uploaded to the texture; otherwise, it can be
   // provided later via glTexSubImage2D.
   // Returns true on success.
-  bool CreateInternal(const void* data, int alignment = 4);
+  bool CreateInternal(const void* data = nullptr);
 
   friend class GlCalculatorHelperImpl;
 

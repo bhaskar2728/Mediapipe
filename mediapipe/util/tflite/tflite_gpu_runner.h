@@ -54,8 +54,7 @@ class TFLiteGPURunner {
       : options_(options) {}
 
   absl::Status InitializeWithModel(const tflite::FlatBufferModel& flatbuffer,
-                                   const tflite::OpResolver& op_resolver,
-                                   bool allow_quant_ops = false);
+                                   const tflite::OpResolver& op_resolver);
 
   void ForceOpenGL() { opengl_is_forced_ = true; }
   void ForceOpenCL() { opencl_is_forced_ = true; }

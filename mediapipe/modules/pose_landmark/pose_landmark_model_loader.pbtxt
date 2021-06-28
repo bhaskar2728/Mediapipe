@@ -18,7 +18,7 @@ node {
   output_side_packet: "PACKET:model_path"
   options: {
     [mediapipe.SwitchContainerOptions.ext] {
-      select: 1
+      select: 2
       contained_node: {
         calculator: "ConstantSidePacketCalculator"
         options: {

@@ -583,9 +583,9 @@ absl::Status Graph::SetParentGlContext(int64 java_gl_context) {
 #if MEDIAPIPE_DISABLE_GPU
   LOG(FATAL) << "GPU support has been disabled in this build!";
 #else
-  ASSIGN_OR_RETURN(gpu_resources_,
-                   mediapipe::GpuResources::Create(
-                       reinterpret_cast<EGLContext>(java_gl_context)));
+  gpu_resources_ = mediapipe::GpuResources::Create(
+                       reinterpret_cast<EGLContext>(java_gl_context))
+                       .value();
 #endif  // MEDIAPIPE_DISABLE_GPU
   return absl::OkStatus();
 }

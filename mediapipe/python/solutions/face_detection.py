@@ -28,8 +28,7 @@ from mediapipe.calculators.util import non_max_suppression_calculator_pb2
 # pylint: enable=unused-import
 from mediapipe.python.solution_base import SolutionBase
 
-SHORT_RANGE_GRAPH_FILE_PATH = 'mediapipe/modules/face_detection/face_detection_short_range_cpu.binarypb'
-FULL_RANGE_GRAPH_FILE_PATH = 'mediapipe/modules/face_detection/face_detection_full_range_cpu.binarypb'
+BINARYPB_FILE_PATH = 'mediapipe/modules/face_detection/face_detection_front_cpu.binarypb'
 
 
 def get_key_point(
@@ -70,26 +69,18 @@ class FaceDetection(SolutionBase):
   for usage examples.
   """
 
-  def __init__(self, min_detection_confidence=0.5, model_selection=0):
+  def __init__(self, min_detection_confidence=0.5):
     """Initializes a MediaPipe Face Detection object.
 
     Args:
       min_detection_confidence: Minimum confidence value ([0.0, 1.0]) for face
         detection to be considered successful. See details in
         https://solutions.mediapipe.dev/face_detection#min_detection_confidence.
-      model_selection: 0 or 1. 0 to select a short-range model that works
-        best for faces within 2 meters from the camera, and 1 for a full-range
-        model best for faces within 5 meters. See details in
-        https://solutions.mediapipe.dev/face_detection#model_selection.
     """
-
-    binary_graph_path = FULL_RANGE_GRAPH_FILE_PATH if model_selection == 1 else SHORT_RANGE_GRAPH_FILE_PATH
-    subgraph_name = 'facedetectionfullrangecommon' if model_selection == 1 else 'facedetectionshortrangecommon'
-
     super().__init__(
-        binary_graph_path=binary_graph_path,
+        binary_graph_path=BINARYPB_FILE_PATH,
         calculator_params={
-            subgraph_name + '__TensorsToDetectionsCalculator.min_score_thresh':
+            'facedetectionfrontcommon__TensorsToDetectionsCalculator.min_score_thresh':
                 min_detection_confidence,
         },
         outputs=['detections'])

@@ -399,12 +399,7 @@ void CalculatorGraphSubmodule(pybind11::module* module) {
             stream_name,
             [callback_fn, stream_name](const Packet& packet) {
               absl::MutexLock lock(&callback_mutex);
-              py::gil_scoped_release gil_release;
-              {
-                // Acquires GIL before calling Python callback.
-                py::gil_scoped_acquire gil_acquire;
-                callback_fn(stream_name, packet);
-              }
+              callback_fn(stream_name, packet);
               return absl::OkStatus();
             },
             observe_timestamp_bounds));

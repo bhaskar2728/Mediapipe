@@ -75,30 +75,26 @@ absl::Status GlContext::CreateContextInternal(
   // TODO: Ensure this works with all options (in particular,
   //   multithreading options, like the special-case combination of USE_PTHREADS
   //   and OFFSCREEN_FRAMEBUFFER)
-  // clang-format off
-  EM_ASM(
-    let init_once = true;
-    if (init_once) {
-      const cachedFindCanvasEventTarget = findCanvasEventTarget;
+  EM_ASM(let init_once = true; if (init_once) {
+    const cachedFindCanvasEventTarget = findCanvasEventTarget;
 
-      if (typeof cachedFindCanvasEventTarget !== 'function') {
-        if (typeof console !== 'undefined') {
-          console.error('Expected Emscripten global function '
-              + '"findCanvasEventTarget" not found. WebGL context creation '
-              + 'may fail.');
-        }
-        return;
+    if (typeof cachedFindCanvasEventTarget != = 'function') {
+      if (typeof console != = 'undefined') {
+        console.error(
+            'Expected Emscripten global function ' +
+            '"findCanvasEventTarget" not found. WebGL context creation ' +
+            'may fail.');
       }
+      return;
+    }
 
-      findCanvasEventTarget = function(target) {
-        if (target == 0) {
-          if (Module && Module.canvas) {
-            return Module.canvas;
-          } else if (Module && Module.canvasCssSelector) {
-            return cachedFindCanvasEventTarget(Module.canvasCssSelector);
-          }
-        }
-        if (typeof console !== 'undefined') {
+    findCanvasEventTarget = function(target) {
+      if (Module && Module.canvas) {
+        return Module.canvas;
+      } else if (Module && Module.canvasCssSelector) {
+        return cachedFindCanvasEventTarget(Module.canvasCssSelector);
+      } else {
+        if (typeof console != = 'undefined') {
           console.warn('Module properties canvas and canvasCssSelector not ' +
                        'found during WebGL context creation.');
         }
@@ -106,14 +102,15 @@ absl::Status GlContext::CreateContextInternal(
         // cases it will not succeed, just in case the user does want to fall-
         // back.
         return cachedFindCanvasEventTarget(target);
-      };  // NOLINT: Necessary semicolon.
-      init_once = false;
-    }
-  );
-  // clang-format on
+      }
+    };  // NOLINT: Necessary semicolon.
+    init_once = false;
+  });
 
+  // Note: below id parameter is only actually used if both Module.canvas and
+  // Module.canvasCssSelector are undefined.
   EMSCRIPTEN_WEBGL_CONTEXT_HANDLE context_handle =
-      emscripten_webgl_create_context(nullptr, &attrs);
+      emscripten_webgl_create_context(0 /* id */, &attrs);
 
   // Check for failure
   if (context_handle <= 0) {

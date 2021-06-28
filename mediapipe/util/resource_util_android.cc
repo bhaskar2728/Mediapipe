@@ -51,9 +51,7 @@ absl::Status DefaultGetResourceContents(const std::string& path,
 
   // Try the test environment.
   absl::string_view workspace = "mediapipe";
-  const char* test_srcdir = std::getenv("TEST_SRCDIR");
-  auto test_path =
-      file::JoinPath(test_srcdir ? test_srcdir : "", workspace, path);
+  auto test_path = file::JoinPath(std::getenv("TEST_SRCDIR"), workspace, path);
   if (file::Exists(test_path).ok()) {
     return file::GetContents(path, output, file::Defaults());
   }

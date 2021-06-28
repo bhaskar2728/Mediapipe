@@ -128,23 +128,9 @@ struct GPUData {
 }  // namespace
 #endif  // MEDIAPIPE_TFLITE_GPU_SUPPORTED
 
-namespace {
-
-int GetXnnpackDefaultNumThreads() {
-#if defined(MEDIAPIPE_ANDROID) || defined(MEDIAPIPE_IOS) || \
-    defined(__EMSCRIPTEN_PTHREADS__)
-  constexpr int kMinNumThreadsByDefault = 1;
-  constexpr int kMaxNumThreadsByDefault = 4;
-  return std::clamp(NumCPUCores() / 2, kMinNumThreadsByDefault,
-                    kMaxNumThreadsByDefault);
-#else
-  return 1;
-#endif  // MEDIAPIPE_ANDROID || MEDIAPIPE_IOS || __EMSCRIPTEN_PTHREADS__
-}
-
 // Returns number of threads to configure XNNPACK delegate with.
-// Returns user provided value if specified. Otherwise, tries to choose optimal
-// number of threads depending on the device.
+// (Equal to user provided value if specified.  Otherwise, it returns number of
+// high cores (hard-coded to 1 for Emscripten without Threads extension))
 int GetXnnpackNumThreads(
     const mediapipe::TfLiteInferenceCalculatorOptions& opts) {
   static constexpr int kDefaultNumThreads = -1;
@@ -152,10 +138,12 @@ int GetXnnpackNumThreads(
       opts.delegate().xnnpack().num_threads() != kDefaultNumThreads) {
     return opts.delegate().xnnpack().num_threads();
   }
-  return GetXnnpackDefaultNumThreads();
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
+  return InferHigherCoreIds().size();
+#else
+  return 1;
+#endif  // !__EMSCRIPTEN__ || __EMSCRIPTEN_PTHREADS__
 }
-
-}  // namespace
 
 // Calculator Header Section
 
@@ -749,8 +737,8 @@ absl::Status TfLiteInferenceCalculator::InitTFLiteGPURunner(
       break;
     }
   }
-  MP_RETURN_IF_ERROR(tflite_gpu_runner_->InitializeWithModel(
-      model, *op_resolver_ptr, /*allow_quant_ops=*/true));
+  MP_RETURN_IF_ERROR(
+      tflite_gpu_runner_->InitializeWithModel(model, *op_resolver_ptr));
 
   // Allocate interpreter memory for cpu output.
   if (!gpu_output_) {
@@ -981,10 +969,6 @@ absl::Status TfLiteInferenceCalculator::LoadDelegate(CalculatorContext* cc) {
   const int kHalfSize = 2;  // sizeof(half)
   // Configure and create the delegate.
   TFLGpuDelegateOptions options;
-  // `enable_quantization` enables the run of sparse models i.e. the models with
-  // DENSIFY op preceding DEQUINTIZE op. Both ops get removed from the execution
-  // graph after the tensor of the weights is read.
-  options.enable_quantization = true;
   options.allow_precision_loss = allow_precision_loss_;
   options.wait_type = TFLGpuDelegateWaitType::TFLGpuDelegateWaitTypeActive;
   if (!delegate_)

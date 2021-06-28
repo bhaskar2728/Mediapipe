@@ -16,7 +16,6 @@
     "mediapipe/examples/ios/objectdetectiongpu/BUILD",
     "mediapipe/examples/ios/objectdetectiontrackinggpu/BUILD",
     "mediapipe/examples/ios/posetrackinggpu/BUILD",
-    "mediapipe/examples/ios/selfiesegmentationgpu/BUILD",
     "mediapipe/framework/BUILD",
     "mediapipe/gpu/BUILD",
     "mediapipe/objc/BUILD",
@@ -36,7 +35,6 @@
     "//mediapipe/examples/ios/objectdetectiongpu:ObjectDetectionGpuApp",
     "//mediapipe/examples/ios/objectdetectiontrackinggpu:ObjectDetectionTrackingGpuApp",
     "//mediapipe/examples/ios/posetrackinggpu:PoseTrackingGpuApp",
-    "//mediapipe/examples/ios/selfiesegmentationgpu:SelfieSegmentationGpuApp",
     "//mediapipe/objc:mediapipe_framework_ios"
   ],
   "optionSet" : {
@@ -105,7 +103,6 @@
     "mediapipe/examples/ios/objectdetectioncpu",
     "mediapipe/examples/ios/objectdetectiongpu",
     "mediapipe/examples/ios/posetrackinggpu",
-    "mediapipe/examples/ios/selfiesegmentationgpu",
     "mediapipe/framework",
     "mediapipe/framework/deps",
     "mediapipe/framework/formats",
@@ -123,7 +120,6 @@
     "mediapipe/graphs/hand_tracking",
     "mediapipe/graphs/object_detection",
     "mediapipe/graphs/pose_tracking",
-    "mediapipe/graphs/selfie_segmentation",
     "mediapipe/models",
     "mediapipe/modules",
     "mediapipe/objc",

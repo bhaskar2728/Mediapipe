@@ -11,10 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-load(
-    "//mediapipe/framework/tool:mediapipe_graph.bzl",
-    "mediapipe_binary_graph",
-)
 
 licenses(["notice"])
 
@@ -28,8 +24,8 @@ cc_library(
         "//mediapipe/calculators/util:detections_to_render_data_calculator",
         "//mediapipe/gpu:gpu_buffer_to_image_frame_calculator",
         "//mediapipe/gpu:image_frame_to_gpu_buffer_calculator",
-        "//mediapipe/modules/face_detection:face_detection_short_range_cpu",
-        "//mediapipe/modules/face_detection:face_detection_short_range_gpu",
+        "//mediapipe/modules/face_detection:face_detection_front_cpu",
+        "//mediapipe/modules/face_detection:face_detection_front_gpu",
     ],
 )
 
@@ -39,7 +35,7 @@ cc_library(
         "//mediapipe/calculators/core:flow_limiter_calculator",
         "//mediapipe/calculators/util:annotation_overlay_calculator",
         "//mediapipe/calculators/util:detections_to_render_data_calculator",
-        "//mediapipe/modules/face_detection:face_detection_short_range_cpu",
+        "//mediapipe/modules/face_detection:face_detection_front_cpu",
     ],
 )
 
@@ -49,8 +45,13 @@ cc_library(
         "//mediapipe/calculators/core:flow_limiter_calculator",
         "//mediapipe/calculators/util:annotation_overlay_calculator",
         "//mediapipe/calculators/util:detections_to_render_data_calculator",
-        "//mediapipe/modules/face_detection:face_detection_short_range_gpu",
+        "//mediapipe/modules/face_detection:face_detection_front_gpu",
     ],
+)
+
+load(
+    "//mediapipe/framework/tool:mediapipe_graph.bzl",
+    "mediapipe_binary_graph",
 )
 
 mediapipe_binary_graph(
@@ -65,31 +66,4 @@ mediapipe_binary_graph(
     graph = "face_detection_mobile_gpu.pbtxt",
     output_name = "face_detection_mobile_gpu.binarypb",
     deps = [":mobile_calculators"],
-)
-
-cc_library(
-    name = "face_detection_full_range_mobile_gpu_deps",
-    deps = [
-        "//mediapipe/calculators/core:flow_limiter_calculator",
-        "//mediapipe/calculators/util:annotation_overlay_calculator",
-        "//mediapipe/calculators/util:detections_to_render_data_calculator",
-        "//mediapipe/modules/face_detection:face_detection_full_range_gpu",
-    ],
-)
-
-mediapipe_binary_graph(
-    name = "face_detection_full_range_mobile_gpu_binary_graph",
-    graph = "face_detection_full_range_mobile_gpu.pbtxt",
-    output_name = "face_detection_full_range_mobile_gpu.binarypb",
-    deps = [":face_detection_full_range_mobile_gpu_deps"],
-)
-
-cc_library(
-    name = "face_detection_full_range_desktop_live_deps",
-    deps = [
-        "//mediapipe/calculators/core:flow_limiter_calculator",
-        "//mediapipe/calculators/util:annotation_overlay_calculator",
-        "//mediapipe/calculators/util:detections_to_render_data_calculator",
-        "//mediapipe/modules/face_detection:face_detection_full_range_cpu",
-    ],
 )

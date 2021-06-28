@@ -2,7 +2,7 @@
 layout: default
 title: Dataset Preparation with MediaSequence
 parent: Solutions
-nav_order: 15
+nav_order: 14
 ---
 
 # Dataset Preparation with MediaSequence

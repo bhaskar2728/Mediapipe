@@ -90,7 +90,7 @@ void cv_line2(cv::Mat& img, const cv::Point& start, const cv::Point& end,
 void AnnotationRenderer::RenderDataOnImage(const RenderData& render_data) {
   for (const auto& annotation : render_data.render_annotations()) {
     if (annotation.data_case() == RenderAnnotation::kRectangle) {
-      DrawRectangle(annotation);
+      //DrawRectangle(annotation);
     } else if (annotation.data_case() == RenderAnnotation::kRoundedRectangle) {
       DrawRoundedRectangle(annotation);
     } else if (annotation.data_case() == RenderAnnotation::kFilledRectangle) {

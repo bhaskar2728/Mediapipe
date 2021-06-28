@@ -14,7 +14,7 @@
 
 #include "mediapipe/modules/objectron/calculators/box.h"
 
-#include "Eigen/Core"
+#include "Eigen/src/Core/util/Constants.h"
 #include "mediapipe/framework/port/logging.h"
 
 namespace mediapipe {

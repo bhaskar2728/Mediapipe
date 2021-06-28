@@ -51,6 +51,8 @@ namespace mediapipe {
 constexpr int kMaxShaderInfoLength = 1024;
 
 GLint GlhCompileShader(GLenum target, const GLchar* source, GLuint* shader) {
+  GLint status;
+
   *shader = glCreateShader(target);
   if (*shader == 0) {
     return GL_FALSE;
@@ -59,11 +61,6 @@ GLint GlhCompileShader(GLenum target, const GLchar* source, GLuint* shader) {
   glCompileShader(*shader);
 
   GL_DEBUG_LOG(Shader, *shader, "compile");
-
-#if UNSAFE_EMSCRIPTEN_SKIP_GL_ERROR_HANDLING
-  return GL_TRUE;
-#else
-  GLint status;
 
   glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
   LOG_IF(ERROR, status == GL_FALSE) << "Failed to compile shader:\n" << source;
@@ -75,16 +72,12 @@ GLint GlhCompileShader(GLenum target, const GLchar* source, GLuint* shader) {
     LOG(ERROR) << "Error message: " << std::string(cmessage, length);
   }
   return status;
-#endif  // UNSAFE_EMSCRIPTEN_SKIP_GL_ERROR_HANDLING
 }
 
 GLint GlhLinkProgram(GLuint program) {
-  glLinkProgram(program);
-
-#if UNSAFE_EMSCRIPTEN_SKIP_GL_ERROR_HANDLING
-  return GL_TRUE;
-#else
   GLint status;
+
+  glLinkProgram(program);
 
   GL_DEBUG_LOG(Program, program, "link");
 
@@ -92,7 +85,6 @@ GLint GlhLinkProgram(GLuint program) {
   LOG_IF(ERROR, status == GL_FALSE) << "Failed to link program " << program;
 
   return status;
-#endif  // UNSAFE_EMSCRIPTEN_SKIP_GL_ERROR_HANDLING
 }
 
 GLint GlhValidateProgram(GLuint program) {

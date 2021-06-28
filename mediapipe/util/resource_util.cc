@@ -31,10 +31,10 @@ ResourceProviderFn resource_provider_ = nullptr;
 
 absl::Status GetResourceContents(const std::string& path, std::string* output,
                                  bool read_as_binary) {
-  if (resource_provider_) {
-    return resource_provider_(path, output);
+  if (resource_provider_ == nullptr || !resource_provider_(path, output).ok()) {
+    return internal::DefaultGetResourceContents(path, output, read_as_binary);
   }
-  return internal::DefaultGetResourceContents(path, output, read_as_binary);
+  return absl::OkStatus();
 }
 
 void SetCustomGlobalResourceProvider(ResourceProviderFn fn) {

@@ -334,7 +334,9 @@ CreateImageToGlTextureTensorConverter(CalculatorContext* cc,
                                       BorderMode border_mode) {
   auto result = absl::make_unique<GlProcessor>();
   MP_RETURN_IF_ERROR(result->Init(cc, input_starts_at_bottom, border_mode));
-  return result;
+
+  // Simply "return std::move(result)" failed to build on macOS with bazel.
+  return std::unique_ptr<ImageToTensorConverter>(std::move(result));
 }
 
 }  // namespace mediapipe

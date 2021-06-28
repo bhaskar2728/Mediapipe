@@ -1,4 +1,4 @@
-# New MediaPipe APIs
+# Experimental new APIs
 
 This directory defines new APIs for MediaPipe:
 
@@ -6,12 +6,13 @@ This directory defines new APIs for MediaPipe:
 - Builder API, for assembling CalculatorGraphConfigs with C++, as an alternative
   to using the proto API directly.
 
-The new APIs interoperate fully with the existing framework code, and we are
-adopting them in our calculators. We are still making improvements, and the
-placement of this code under the `mediapipe::api2` namespace is not final.
+The code is working, and the new APIs interoperate fully with the existing
+framework code. They are considered a work in progress, but are being released
+now so we can begin adopting them in our calculators.
 
-Developers are welcome to try out these APIs as early adopters, but there may be
-breaking changes.
+Developers are welcome to try out these APIs as early adopters, but should
+expect breaking changes. The placement of this code under the `mediapipe::api2`
+namespace is not final.
 
 ## Node API
 

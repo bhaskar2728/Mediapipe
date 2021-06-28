@@ -213,7 +213,7 @@ class FaceMesh(SolutionBase):
                 .ConstantSidePacketCalculatorOptions.ConstantSidePacket(
                     bool_value=not static_image_mode)
             ],
-            'facedetectionshortrangecpu__TensorsToDetectionsCalculator.min_score_thresh':
+            'facedetectionfrontcpu__TensorsToDetectionsCalculator.min_score_thresh':
                 min_detection_confidence,
             'facelandmarkcpu__ThresholdingCalculator.threshold':
                 min_tracking_confidence,
